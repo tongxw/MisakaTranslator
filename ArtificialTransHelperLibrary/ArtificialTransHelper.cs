@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArtificialTransHelperLibrary
 {
@@ -33,37 +30,87 @@ namespace ArtificialTransHelperLibrary
         /// <param name="source"></param>
         /// <param name="Trans"></param>
         /// <returns></returns>
-        public bool AddTrans(string source,string Trans)
+        public int AddTrans(string source,string Trans)
         {
             if (source == null || source == "" || Trans == null) {
                 //空条目不添加，且返回假
-                return false;
+                return 1;
             }
 
-            string sql =
-                $"SELECT * FROM artificialtrans WHERE source = '{source}';";
-            
-            List<List<string>> ret = sqlite.ExecuteReader(sql, 4);
+            //string sql =
+            //    $"SELECT * FROM artificialtrans WHERE source = '{source}';";
 
-            if (ret == null) {
-                return false;
-            }
+            //List<string> ret = sqlite.ExecuteReader(sql, 4);
 
-            if (ret.Count > 0)
+            //if (ret == null) {
+            //    return 2;
+            //}
+
+            //if (ret.Count >= 3 && ret[2] != "")
+            //{
+            //    // 源条目存在且机器翻译不为空
+            //    return 0;
+            //}
+            //if (ret.Count >= 3 && Trans == "")
+            //{
+            //    // 源条目存在且提供的字符串为空
+            //    return 0;
+            //}
+            string sql = string.Empty;
+            string oldTrans = getTrans(source);
+            if (oldTrans == null)
             {
-                return true;
+                // new, insert
+                sql = $"INSERT INTO artificialtrans VALUES(NULL,'{source}','{Trans}',NULL);";
+            } else
+            {
+                // exist, update
+                sql = $"UPDATE artificialtrans SET machineTrans = '{Trans}' WHERE source = '{source}';";
             }
 
-            sql =
-                $"INSERT INTO artificialtrans VALUES(NULL,'{source}','{Trans}',NULL);";
+
+            //sql =
+            //    $"INSERT INTO artificialtrans VALUES(NULL,'{source}','{Trans}',NULL);";
             if (sqlite.ExecuteSql(sql) > 0)
             {
-                return true;
+                return 0;
             }
             else
             {
-                return false;
+                return 3;
             }
+        }
+
+        public string getTrans(string source)
+        {
+            string sql =
+                $"SELECT * FROM artificialtrans WHERE source = '{source}';";
+
+            List<List<String>> ret = sqlite.ExecuteReader(sql, 4);
+
+            if (ret == null || ret.Count == 0)
+            {
+                return null;
+            }
+
+
+            foreach (List<String> row in ret)
+            {
+                if (row.Count >= 3)
+                {
+                    if (row[2] != "")
+                    {
+                        return row[2];
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        public  string getLastError()
+        {
+            return sqlite.GetLastError();
         }
 
         /// <summary>
@@ -72,7 +119,8 @@ namespace ArtificialTransHelperLibrary
         /// <param name="source"></param>
         /// <param name="Trans"></param>
         /// <returns></returns>
-        public bool UpdateTrans(string source, string Trans) {
+        public bool UpdateTrans(string source, string Trans)
+        {
             string sql =
                 $"UPDATE artificialtrans SET userTrans = '{Trans}' WHERE source = '{source}';";
             if (sqlite.ExecuteSql(sql) > 0)

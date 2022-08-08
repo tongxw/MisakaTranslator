@@ -408,8 +408,13 @@ namespace MisakaTranslator_WPF
                 UpdateSource(repairedText);
 
                 // 分别获取两个翻译结果
-                TranslateApiSubmitASync(repairedText, 1, isRenew);
-                TranslateApiSubmitASync(repairedText, 2, isRenew);
+                if (!TranslationExists(repairedText))
+                {
+                    TranslateApiSubmitASync(repairedText, 1, isRenew);
+                    TranslateApiSubmitASync(repairedText, 2, isRenew);
+                }
+                //TranslateApiSubmitASync(repairedText, 1, isRenew);
+                //TranslateApiSubmitASync(repairedText, 2, isRenew);
             }
         }
 
@@ -506,6 +511,30 @@ namespace MisakaTranslator_WPF
             }
         }
 
+        private Boolean TranslationExists(string repairedText)
+        {
+            if (!Common.appSettings.ATon)
+            {
+                return false;
+            }
+
+            string transRes = string.Empty;
+            transRes = _artificialTransHelper.getTrans(repairedText);
+            if (transRes == null || transRes == "")
+            {
+                return false;
+            }
+
+            //7.翻译结果显示到窗口上
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                FirstTransText.Text = transRes;
+            });
+
+            return true;
+        }
+
+
         /// <summary>
         /// 提交原文到翻译器，获取翻译结果并显示
         /// </summary>
@@ -526,11 +555,13 @@ namespace MisakaTranslator_WPF
                     transRes = await _translator1.TranslateAsync(beforeString, Common.UsingDstLang, Common.UsingSrcLang);
                     if (transRes == null)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            Growl.WarningGlobal(_translator1.GetType().Name + ": " + _translator1.GetLastError());
-                        });
+                        //Application.Current.Dispatcher.Invoke(() =>
+                        //{
+                        //    Growl.WarningGlobal(_translator1.GetType().Name + ": " + _translator1.GetLastError());
+                        //});
+
                         return;
+
                     }
                 }
             }
@@ -570,7 +601,8 @@ namespace MisakaTranslator_WPF
                     break;
             }
 
-            if (!isRenew)
+            isRenew = false;
+            if (!isRenew && tranResultIndex == 1)
             {
                 lock (_saveTransResultLock)
                 {
@@ -585,17 +617,44 @@ namespace MisakaTranslator_WPF
                     //9.翻译原句和结果记录到数据库 
                     if (Common.appSettings.ATon)
                     {
-                        bool addRes = _artificialTransHelper.AddTrans(repairedText, afterString);
-                        if (addRes == false)
+                        int addRes = _artificialTransHelper.AddTrans(repairedText, afterString);
+                        string warningMsg = string.Empty;
+                        switch (addRes)
+                        {
+                            case 1:
+                                warningMsg = "空条目不添加，且返回假";
+                                break;
+                            case 2:
+                                warningMsg = "数据库查询失败";
+                                break;
+                            case 3:
+                                warningMsg = _artificialTransHelper.getLastError();
+                                break;
+                            default:
+                                break;
+
+                        }
+                        if (warningMsg != string.Empty)
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 HandyControl.Data.GrowlInfo growlInfo = new HandyControl.Data.GrowlInfo();
-                                growlInfo.Message = Application.Current.Resources["ArtificialTransAdd_Error_Hint"].ToString();
+                                //growlInfo.Message = Application.Current.Resources["ArtificialTransAdd_Error_Hint"].ToString();
+                                growlInfo.Message = warningMsg;
                                 growlInfo.WaitTime = 2;
                                 Growl.InfoGlobal(growlInfo);
                             });
                         }
+                        //if (addRes == false)
+                        //{
+                        //    Application.Current.Dispatcher.Invoke(() =>
+                        //    {
+                        //        HandyControl.Data.GrowlInfo growlInfo = new HandyControl.Data.GrowlInfo();
+                        //        growlInfo.Message = Application.Current.Resources["ArtificialTransAdd_Error_Hint"].ToString();
+                        //        growlInfo.WaitTime = 2;
+                        //        Growl.InfoGlobal(growlInfo);
+                        //    });
+                        //}
                     }
                 }
             }
