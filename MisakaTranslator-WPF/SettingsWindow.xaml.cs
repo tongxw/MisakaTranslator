@@ -51,6 +51,11 @@ namespace MisakaTranslator_WPF
             this.SettingFrame.Navigate(new Uri("SettingsPages/TranslatorPages/DeepLTransSettingsPage.xaml", UriKind.Relative));
         }
 
+        private void Item_ChatGPTTrans_Selected(object sender, RoutedEventArgs e)
+        {
+            this.SettingFrame.Navigate(new Uri("SettingsPages/TranslatorPages/ChatGPTTransSettingsPage.xaml", UriKind.Relative));
+        }
+
         private void Item_FYJTrans_Selected(object sender, RoutedEventArgs e)
         {
             this.SettingFrame.Navigate(new Uri("SettingsPages/TranslatorPages/TencentFYJTransSettingsPage.xaml", UriKind.Relative));
@@ -84,9 +89,13 @@ namespace MisakaTranslator_WPF
         {
             this.SettingFrame.Navigate(new Uri("SettingsPages/OCRPages/BaiduFanyiOCRSettingsPage.xaml", UriKind.Relative));
         }
-        private void Item_Tesseract5OCR_Selected(object sender, RoutedEventArgs e)
+        private void Item_TencentOCR_Selected(object sender, RoutedEventArgs e)
         {
-            this.SettingFrame.Navigate(new Uri("SettingsPages/OCRPages/TesseractOCR5SettingsPage.xaml", UriKind.Relative));
+            this.SettingFrame.Navigate(new Uri("SettingsPages/OCRPages/TencentOCRSettingsPage.xaml", UriKind.Relative));
+        }
+        private void Item_TesseractCli_Selected(object sender, RoutedEventArgs e)
+        {
+            this.SettingFrame.Navigate(new Uri("SettingsPages/OCRPages/TesseractCliSettingsPage.xaml", UriKind.Relative));
         }
 
         private void Item_OCRGeneral_Selected(object sender, RoutedEventArgs e)
@@ -112,6 +121,11 @@ namespace MisakaTranslator_WPF
         private void Item_xxgrz_Selected(object sender, RoutedEventArgs e)
         {
             this.SettingFrame.Navigate(new Uri("SettingsPages/DictionaryPages/XxgJpZhDictPage.xaml", UriKind.Relative));
+        }
+
+        private void Item_MeCabSettings_Selected(object sender, RoutedEventArgs e)
+        {
+            this.SettingFrame.Navigate(new Uri("SettingsPages/DictionaryPages/MecabDictPage.xaml", UriKind.Relative));
         }
 
         private void Item_KingsoftFAIT_Selected(object sender, RoutedEventArgs e)

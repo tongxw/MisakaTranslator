@@ -1,40 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OCRLibrary
 {
-    public class OCRCommon
+    public static class OCRCommon
     {
         public static List<string> lstOCR = new List<string>()
         {
             "BaiduOCR",
             "BaiduFanyiOCR",
+            "TencentOCR",
             "TesseractOCR",
-            "Tesseract5"
+            "TesseractCli"
         };
+
+        static OCRCommon()
+        {
+            if (Environment.OSVersion.Version.Build >= 10240)
+            {
+                lstOCR.Add("WindowsOCR");
+            }
+        }
 
         public static List<string> GetOCRList()
         {
             return lstOCR;
         }
 
-        public static OCREngine OCRAuto(string ocr) {
+        public static OCREngine OCRAuto(string ocr)
+        {
             switch (ocr)
             {
                 case "BaiduOCR":
-                    return new BaiduGeneralOCR(); ;
+                    return new BaiduGeneralOCR();
                 case "BaiduFanyiOCR":
                     return new BaiduFanyiOCR();
+                case "TencentOCR":
+                    return new TencentOCR();
                 case "TesseractOCR":
-                    return new TesseractOCR(); ;
-                case "Tesseract5":
-                    return new Tesseract5OCR();
+                    return new TesseractOCR();
+                case "TesseractCli":
+                    return new TesseractCli();
+                case "WindowsOCR":
+                    return new WindowsOCR();
                 default:
                     return null;
             }
         }
+
+        public static System.Text.Json.JsonSerializerOptions JsonOP = new()
+        {
+            IncludeFields = true
+        };
     }
 }

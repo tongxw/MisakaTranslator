@@ -37,6 +37,7 @@ namespace TranslatorLibrary
             { "金山快译" , "KingsoftFastAITTranslator" },
             { "译典通", "Dreye"},
             { "DeepL", "DeepLTranslator"},
+            {"ChatGPT","ChatGPTTranslator" },
             { "本地人工翻译(见说明)" , "ArtificialTranslator"}
         };
 
@@ -70,8 +71,7 @@ namespace TranslatorLibrary
         /// <returns></returns>
         public static string GetTimeStamp()
         {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString();
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
         }
 
         /// <summary>
@@ -108,14 +108,27 @@ namespace TranslatorLibrary
                     if (HC == null)
                     {
                         HC = new HttpClient() { Timeout = TimeSpan.FromSeconds(8) };
-                        var headers = HC.DefaultRequestHeaders;
-                        headers.UserAgent.ParseAdd("MisakaTranslator");
-                        headers.Connection.ParseAdd("keep-alive");
+                        HC.DefaultRequestHeaders.UserAgent.ParseAdd("MisakaTranslator");
                         ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12; // For FX4.7
                     }
             return HC;
         }
+        public static void SetHttpProxiedClient(string addr)
+        {
+            if (HC == null)
+            {
+                var px = new WebProxy() { Address = new Uri(addr), UseDefaultCredentials = true };
+                var ph = new HttpClientHandler() { Proxy = px };
+                HC = new HttpClient(ph) { Timeout = TimeSpan.FromSeconds(8) };
+                HC.DefaultRequestHeaders.UserAgent.ParseAdd("MisakaTranslator");
+            }
+        }
 
         public static Random RD = new Random();
+
+        public static System.Text.Json.JsonSerializerOptions JsonOP = new()
+        {
+            IncludeFields = true
+        };
     }
 }

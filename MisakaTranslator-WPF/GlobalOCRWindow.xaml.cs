@@ -1,4 +1,5 @@
-﻿using System;
+extern alias Tesseract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,10 +56,10 @@ namespace MisakaTranslator_WPF
                     HandyControl.Controls.Growl.ErrorGlobal($"TesseractOCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                 }
             }
-            else if (Common.appSettings.OCRsource == "Tesseract5")
+            else if (Common.appSettings.OCRsource == "TesseractCli")
             {
-                ocr = new Tesseract5OCR();
-                if (ocr.OCR_Init(Common.appSettings.Tesseract5OCR_Path, Common.appSettings.Tesseract5OCR_Args))
+                ocr = new TesseractCli();
+                if (ocr.OCR_Init(Common.appSettings.TesseractCli_Path, Common.appSettings.TesseractCli_Args))
                 {
                     ocr.SetOCRSourceLang(Common.appSettings.GlobalOCRLang);
                     res = await ocr.OCRProcessAsync(img);
@@ -69,12 +70,12 @@ namespace MisakaTranslator_WPF
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.WarningGlobal($"Tesseract5 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                        HandyControl.Controls.Growl.WarningGlobal($"TesseractCli {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                     }
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.ErrorGlobal($"Tesseract5 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                    HandyControl.Controls.Growl.ErrorGlobal($"TesseractCli {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                 }
             }
             else if (Common.appSettings.OCRsource == "BaiduOCR")
@@ -115,12 +116,50 @@ namespace MisakaTranslator_WPF
                 else
                     HandyControl.Controls.Growl.ErrorGlobal($"百度翻译OCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
             }
+            else if (Common.appSettings.OCRsource == "TencentOCR")
+            {
+                ocr = new TencentOCR();
+                if (ocr.OCR_Init(Common.appSettings.TXOSecretId, Common.appSettings.TXOSecretKey))
+                {
+                    ocr.SetOCRSourceLang(Common.appSettings.GlobalOCRLang);
+                    res = await ocr.OCRProcessAsync(new System.Drawing.Bitmap(img));
+
+                    if (res != null)
+                        FirstTransText.Text = res;
+                    else
+                        HandyControl.Controls.Growl.WarningGlobal($"腾讯云图片翻译 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                }
+                else
+                    HandyControl.Controls.Growl.ErrorGlobal($"腾讯云图片翻译 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+            }
+            else if (Common.appSettings.OCRsource == "WindowsOCR")
+            {
+                ocr = new WindowsOCR();
+                if (ocr.OCR_Init("", "") != false)
+                {
+                    ocr.SetOCRSourceLang(Common.appSettings.GlobalOCRLang);
+                    res = await ocr.OCRProcessAsync(img);
+
+                    if (res != null)
+                    {
+                        sourceText.Text = res;
+                    }
+                    else
+                    {
+                        HandyControl.Controls.Growl.WarningGlobal($"Windows OCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                    }
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.ErrorGlobal($"Windows OCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                }
+            }
 
             if (res == null)
             {
                 FirstTransText.Text = "OCR ERROR";
             }
-            else if (Common.appSettings.OCRsource != "BaiduFanyiOCR")
+            else if (!(Common.appSettings.OCRsource == "BaiduFanyiOCR" || Common.appSettings.OCRsource == "TencentOCR"))
             {
                 // 因为历史原因，OCR的源语言用的是三个字母的，如eng和jpn。而翻译的API即Common.UsingSrcLang用的两个字母，如en和jp
                 string srclang;
@@ -142,6 +181,10 @@ namespace MisakaTranslator_WPF
                     else
                         res = res.Replace("\n", "").Replace("\r", "");
 
+                if (Common.appSettings.HttpProxy != "")
+                {
+                    CommonFunction.SetHttpProxiedClient(Common.appSettings.HttpProxy);
+                }
                 ITranslator translator1 = TranslateWindow.TranslatorAuto(Common.appSettings.FirstTranslator);
                 ITranslator translator2 = TranslateWindow.TranslatorAuto(Common.appSettings.SecondTranslator);
                 //5.提交翻译

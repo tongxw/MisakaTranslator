@@ -44,8 +44,9 @@
     <sys:String x:Key="SettingsMenu_OCRSettings">OCR Settings</sys:String>
     <sys:String x:Key="SettingsMenu_OCRSettings_General">General</sys:String>
     <sys:String x:Key="SettingsMenu_OCRSettings_Baidu">Baidu OCR API</sys:String>
-    <sys:String x:Key="SettingsMenu_OCRSettings_BaiduFanyi">BaiduFanyi OCR API</sys:String>
-    <sys:String x:Key="SettingsMenu_OCRSettings_Tesseract5">Tesseract5 OCR</sys:String>
+    <sys:String x:Key="SettingsMenu_OCRSettings_BaiduFanyi">BaiduFanyi OCR</sys:String>
+    <sys:String x:Key="SettingsMenu_OCRSettings_Tencent">Tencent Image Translation</sys:String>
+    <sys:String x:Key="SettingsMenu_OCRSettings_TesseractCli">TesseractCli OCR</sys:String>
     
     
     <sys:String x:Key="Language_Changed">Language is set. Restart translator to take effect.</sys:String>
@@ -56,6 +57,7 @@
     <sys:String x:Key="SettingsMenu_TranslatorSettings_Baidu">百度翻译 Baidu Translate</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_TencentFYJ">腾讯翻译君 Tencent AI Translate</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_TencentOld">腾讯云翻译 Tencent TMT</sys:String>
+    <sys:String x:Key="SettingsMenu_TranslatorSettings_YoudaoZhiyun">有道智云 Youdao AI</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_Jbeijing">Jbeijing</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_KingsoftFAIT">金山快译 Kingsoft FastAIT</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_Dreye">译典通 Dr.eye</sys:String>
@@ -63,6 +65,7 @@
     <sys:String x:Key="SettingsMenu_DictSettings">Dictionary Settings</sys:String>
     <sys:String x:Key="SettingsMenu_DictSettings_xxgrz">小学馆日中 Shogakukan ja-zh dictionary</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_DeepL">DeepL</sys:String>
+    <sys:String x:Key="SettingsMenu_TranslatorSettings_ChatGPT">ChatGPT</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_IBM">IBM</sys:String>
     <sys:String x:Key="SettingsMenu_TranslatorSettings_Yandex">Yandex</sys:String>
 
@@ -78,6 +81,7 @@
     <sys:String x:Key="GeneralTransSettingsPage_Introduce">The translator window simultaneously displays two sources at most. You can set the APIs in use and toggle the sentence-break setting from below.</sys:String>
     <sys:String x:Key="GeneralTransSettingsPage_FirstTranslator">No.1 translation source</sys:String>
     <sys:String x:Key="GeneralTransSettingsPage_SecondTranslator">No.2 translation source</sys:String>
+    <sys:String x:Key="GeneralTransSettingsPage_HttpProxy">HTTP Proxy Address (leaves null if unused)</sys:String>
     <sys:String x:Key="GeneralTransSettingsPage_EachRowTransCheckBox">Enable sentence-break</sys:String>
     <sys:String x:Key="GeneralTransSettingsPage_TransSourceHint">Note: Translation takes longer if you use multiple online APIs at the same time.</sys:String>
     <sys:String x:Key="GeneralTransSettingsPage_EachRowTransHint">When disabled, the Translator combines all texts into one sentence. This improves translation quality for some games.</sys:String>
@@ -88,6 +92,11 @@
 
     <sys:String x:Key="DeepLTransSettingsPage_Introduce">DeepL (network required) provides better translation among them English, Japanese and Chinese. You need to apply for the translation services, acquire the authentication key, and then fill in below before testing. If the API is tested as invalid, you can refer to official Baidu documentations with the error codes. It is likely to incur charges, &quot;Check API quota&quot; will lead you to the dashboard of DeepL Translate.</sys:String>
     <sys:String x:Key="DeepLTransSettingsPage_secretKey">DeepL authentication key</sys:String>
+
+    <sys:String x:Key="ChatGPTTransSettingsPage_Introduce">ChatPT (network required) provides AI Tranlate. You need to apply for the API, acquire the authentication key, and then fill in below before testing. If the API is tested as invalid, you can refer to official OpenAI documentations with the error codes. It is likely to incur charges, &quot;Check API quota&quot; will lead you to the dashboard of OpenAI.</sys:String>
+    <sys:String x:Key="ChatGPTTransSettingsPage_secretKey">ChatGPT authentication key</sys:String>
+    <sys:String x:Key="ChatGPTTransSettingsPage_apiUrl">ChatGPT API URL</sys:String>
+
 
     <sys:String x:Key="TencentOldTransSettingsPage_Introduce">Tencent TMT API (腾讯云翻译, network required) supports multilingual translation with better support for Japanese and Chinese. You need to apply for the API (on the website in Chinese), get access to the SecretId and SecretKey, and then fill in below before testing. If the API is tested as invalid, you can refer to official Tencent documentations with the error codes. Previous version of API is likely to incur charges, &quot;Check API quota&quot; will lead you to the dashboard of Tencent TMT.</sys:String>
     <sys:String x:Key="TencentOldTransSettingsPage_SecretId">SecretId</sys:String>
@@ -124,7 +133,7 @@
     <sys:String x:Key="DreyeTransSettingsPage_Path">Dr.eye Path</sys:String>
     <sys:String x:Key="DreyeTransSettingsPage_ChoosePathHint">Please select the folder where Dr.eye is located</sys:String>
 
-    <sys:String x:Key="OCRGeneralSettingsPage_Introduce">This is the OCR (Optical Character Recognition) setting page. The translation window supports only one OCR source. Offline OCR uses Tesseract. It currently supports English and Japanese recognition. Tesseract5_vert can only supports vertical Japanese. If the recognition performance is low, you can train related OCR word library or use Baidu online OCR instead.</sys:String>
+    <sys:String x:Key="OCRGeneralSettingsPage_Introduce">This is the OCR (Optical Character Recognition) setting page. The translation window supports only one OCR source. Offline OCR uses Tesseract. It currently supports English and Japanese recognition. TesseractCli_vert can only supports vertical Japanese. If the recognition performance is low, you can train related OCR word library or use Baidu online OCR instead.</sys:String>
     <sys:String x:Key="OCRGeneralSettingsPage_OCRSource">OCR source</sys:String>
 
     <sys:String x:Key="OCRGeneralSettingsPage_Introduce_GlobalOCR">Select a global shortcut here for the global OCR function, with which you can recognize and translate in any case. It displays a separate window. Click and press the shortcut you want in the input box below, such as Ctrl + A, and the setting takes effect after the translator is restarted.</sys:String>
@@ -136,13 +145,15 @@
 
     <sys:String x:Key="BaiduFanyiOCRSettingsPage_Introduce">BaiduFanyi OCR have the same parameters as "Translation Settings - Baidu Translate". Note you must trun on "Image translation" service. This one directly translates from image to Chinese, rather than OCR to text then translate.</sys:String>
 
-    <sys:String x:Key="TessactOCR5SettingsPage_Introduce">Tesseract5 support any languages, but only Japanese are pre-configed. Use command line args for other languages. (See tesseartact --help-extra for details)</sys:String>
-    <sys:String x:Key="TessactOCR5SettingsPage_Path">Tesseract5 Path</sys:String>
-    <sys:String x:Key="TessactOCR5SettingsPage_Setting">Tesseract5 Mode</sys:String>
-    <sys:String x:Key="TessactOCR5SettingsPage_Args">Tesseract5 Parameters</sys:String>
-    <sys:String x:Key="TessactOCR5SettingsPage_Select">Select</sys:String>
+    <sys:String x:Key="TencentOCRSettingsPage_Introduce">Tencent Image Translation have the same parameters as "Translation Settings - Tencent". This one directly translates from image to Chinese, rather than OCR to text then translate.</sys:String>
 
-    <sys:String x:Key="HookSettingsPage_Introduce">This is the text hook method (Textractor) setting. Textractor was recoded and runs along with the Translator. There is no need to change its path.</sys:String>
+    <sys:String x:Key="TesseractCliSettingsPage_Introduce">TesseractCli support any languages, but only Japanese are pre-configed. Use command line args for other languages. (See tesseartact --help-extra for details)</sys:String>
+    <sys:String x:Key="TesseractCliSettingsPage_Path">TesseractCli Path</sys:String>
+    <sys:String x:Key="TesseractCliSettingsPage_Setting">TesseractCli Mode</sys:String>
+    <sys:String x:Key="TesseractCliSettingsPage_Args">TesseractCli Parameters</sys:String>
+    <sys:String x:Key="TesseractCliSettingsPage_Select">Select</sys:String>
+
+    <sys:String x:Key="HookSettingsPage_Introduce">This is Textractor setting. You need to choose the path of its folder after installing or extracting it.</sys:String>
     <sys:String x:Key="HookSettingsPage_AutoHook">Enable smart hook</sys:String>
     <sys:String x:Key="HookSettingsPage_AutoHook_Introduce">Once enabled, Translator hooks the process that uses the biggest memory among multiple processes with the same name.</sys:String>
     <sys:String x:Key="HookSettingsPage_AutoHookHint">Note: This approach is slightly more efficient, but may not find the text.</sys:String>
@@ -253,7 +264,6 @@
     <sys:String x:Key="ChooseHotKeyPage_NoKeyHint">Please set a trigger</sys:String>
     <sys:String x:Key="ChooseHotKeyPage_TooLessDelayHint">Delay must be greater than 0 ms</sys:String>
 
-    <sys:String x:Key="TranslateWin_DragTitle">Hold to drag here</sys:String>
     <sys:String x:Key="TranslateWin_Menu_ChangeSize">Resize the window</sys:String>
     <sys:String x:Key="TranslateWin_Menu_ShowSource">Show/Hide source text</sys:String>
     <sys:String x:Key="TranslateWin_Menu_Settings">Translator Window Settings</sys:String>
@@ -274,8 +284,8 @@
     <sys:String x:Key="TransWinSettingsWin_Tab_source">Source text</sys:String>
     <sys:String x:Key="TransWinSettingsWin_Tab_first">No.1 Translation</sys:String>
     <sys:String x:Key="TransWinSettingsWin_Tab_second">No.2 Translation</sys:String>
-    <sys:String x:Key="TransWinSettingsWin_Opacity">Translator window opacity</sys:String>
-    <sys:String x:Key="TransWinSettingsWin_BgColor">Background color</sys:String>
+    <sys:String x:Key="TransWinSettingsWin_BgColor">Background color and opacity</sys:String>
+    <sys:String x:Key="TransWinSettingsWin_ZenMode">Zen Mode (Valid only this time)</sys:String>
     <sys:String x:Key="TransWinSettingsWin_FontColor">Font color</sys:String>
     <sys:String x:Key="TransWinSettingsWin_FontSize">Font size</sys:String>
     <sys:String x:Key="TransWinSettingsWin_FontName">Font</sys:String>
@@ -293,6 +303,11 @@
     <sys:String x:Key="XxgJpZhDictPage_TestSourceWord">Dictionary query test:</sys:String>
     <sys:String x:Key="XxgJpZhDictPage_BtnTest">Look up</sys:String>
     <sys:String x:Key="XxgJpZhDictPage_ChoosePathHint">Select the Shogakukan dictionary database file.</sys:String>
+
+    <sys:String x:Key="MecabDictPage_Introduce">Please download the dictionary's databases of MeCab, and fill in its location.</sys:String>
+    <sys:String x:Key="MecabDictPage_DBPath">Database folder path</sys:String>
+    <sys:String x:Key="MecabDictPage_ClearPath">Clear</sys:String>
+    <sys:String x:Key="TranslateWin_NoMeCab_Hint">Can't find MeCab Database，please set folder properly.</sys:String>
 
     <sys:String x:Key="ChooseHookFuncPage_MBOX_hookcodeConfirm_left">MisakaTranslator has detected that you have input custom H-code behavior. The last H-code recorded is</sys:String>
     <sys:String x:Key="ChooseHookFuncPage_MBOX_hookcodeConfirm_right">If you confirm that this H-code can get text, please select "Yes"; if it can't, select "No" to re-inject a custom H-code; if you do not need a custom H-code, please select "Cancel" to enter the next interface.</sys:String>
@@ -316,7 +331,15 @@
     <sys:String x:Key="AddOptWin_Success_Hint">已添加名词翻译优化词条</sys:String>
     <sys:String x:Key="AddOptWin_Error_Hint">添加名词翻译优化词条失败</sys:String>
 
+    <sys:String x:Key="TransWinSettingsWin_DropShadowCbox">开启文字阴影</sys:String>
+
     <sys:String x:Key="TransWinSettingsWin_KanaCbox">开启日语原文假名标注</sys:String>
+
+    <sys:String x:Key="TransWinSettingsWin_HirakanaCbox">使用平假名注音</sys:String>
+
+    <sys:String x:Key="TransWinSettingsWin_KanaBoldCbox">将假名标注加粗</sys:String>
+    <sys:String x:Key="TransWinSettingsWin_ColorfulCbox">开启源文本分词上色</sys:String>
+
     <sys:String x:Key="MainWindow_AutoUpdateCheck">发现新版本！点击确认进入下载页面，点击取消忽略本次更新提示。</sys:String>
 
     <sys:String x:Key="GeneralTransSettingsPage_Translimit">翻译限制字数</sys:String>

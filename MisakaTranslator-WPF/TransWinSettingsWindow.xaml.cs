@@ -73,7 +73,7 @@ namespace MisakaTranslator_WPF
 
             sourceFontSize.ValueChanged += delegate
             {
-                translateWin.SourceTextFontSize = (int) sourceFontSize.Value;
+                translateWin.SourceTextFontSize = (int)sourceFontSize.Value;
                 Common.appSettings.TF_srcTextSize = sourceFontSize.Value;
             };
 
@@ -89,15 +89,45 @@ namespace MisakaTranslator_WPF
                 Common.appSettings.TF_secondTransTextSize = secondFontSize.Value;
             };
 
-            OpacityBar.ValueChanged += delegate
+            DropShadowCheckBox.Click += delegate
             {
-                translateWin.BackWinChrome.Opacity = OpacityBar.Value / 100;
-                Common.appSettings.TF_Opacity = OpacityBar.Value;
+                Common.appSettings.TF_DropShadow = (bool)DropShadowCheckBox.IsChecked;
             };
 
             KanaCheckBox.Click += delegate
             {
                 Common.appSettings.TF_isKanaShow = (bool)KanaCheckBox.IsChecked;
+            };
+
+            HirakanaCheckBox.Click += delegate
+            {
+                Common.appSettings.TF_Hirakana = (bool)HirakanaCheckBox.IsChecked;
+            };
+
+            KanaBoldCheckBox.Click += delegate
+            {
+                Common.appSettings.TF_SuperBold = (bool)KanaBoldCheckBox.IsChecked;
+            };
+
+            ColorfulCheckBox.Click += delegate
+            {
+                Common.appSettings.TF_Colorful = (bool)ColorfulCheckBox.IsChecked;
+            };
+
+            ZenModeCheckBox.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                if ((bool)(sender as CheckBox).IsChecked)
+                {
+                    translateWin.TitleBar.Visibility = Visibility.Collapsed;
+                    translateWin.Top += translateWin.TitleBar.Height;
+                    translateWin.Height -= translateWin.TitleBar.Height;
+                }
+                else
+                {
+                    translateWin.TitleBar.Visibility = Visibility.Visible;
+                    translateWin.Top -= translateWin.TitleBar.Height;
+                    translateWin.Height += translateWin.TitleBar.Height;
+                }
             };
         }
 
@@ -107,9 +137,9 @@ namespace MisakaTranslator_WPF
         private void UI_Init()
         {
             BrushConverter brushConverter = new BrushConverter();
-            BgColorBlock.Background = (Brush) brushConverter.ConvertFromString(Common.appSettings.TF_BackColor);
-            firstColorBlock.Background = (Brush) brushConverter.ConvertFromString(Common.appSettings.TF_firstTransTextColor);
-            secondColorBlock.Background = (Brush) brushConverter.ConvertFromString(Common.appSettings.TF_secondTransTextColor);
+            BgColorBlock.Background = (Brush)brushConverter.ConvertFromString(Common.appSettings.TF_BackColor);
+            firstColorBlock.Background = (Brush)brushConverter.ConvertFromString(Common.appSettings.TF_firstTransTextColor);
+            secondColorBlock.Background = (Brush)brushConverter.ConvertFromString(Common.appSettings.TF_secondTransTextColor);
 
             for (int i = 0; i < FontList.Count; i++)
             {
@@ -133,8 +163,11 @@ namespace MisakaTranslator_WPF
             firstFontSize.Value = Common.appSettings.TF_firstTransTextSize;
             secondFontSize.Value = Common.appSettings.TF_secondTransTextSize;
 
-            OpacityBar.Value = Common.appSettings.TF_Opacity;
+            DropShadowCheckBox.IsChecked = Common.appSettings.TF_DropShadow;
             KanaCheckBox.IsChecked = Common.appSettings.TF_isKanaShow;
+            HirakanaCheckBox.IsChecked = Common.appSettings.TF_Hirakana;
+            KanaBoldCheckBox.IsChecked = Common.appSettings.TF_SuperBold;
+            ColorfulCheckBox.IsChecked = Common.appSettings.TF_Colorful;
         }
 
         private void ChooseColorBtn_Click(object sender, RoutedEventArgs e)
@@ -148,14 +181,16 @@ namespace MisakaTranslator_WPF
                 WindowStyle = WindowStyle.None,
                 MinWidth = 0,
                 MinHeight = 0,
-                Title = "选择颜色"
+                Title = "选择颜色",
+                Owner = this
             };
             picker.Confirmed += delegate
             {
                 if (sender == BgColorBtn)
                 {
+                    translateWin.LockButton.IsChecked = true;
                     BgColorBlock.Background = picker.SelectedBrush;
-                    translateWin.BackWinChrome.Background = picker.SelectedBrush;
+                    translateWin.Background = picker.SelectedBrush;
                     Common.appSettings.TF_BackColor = picker.SelectedBrush.ToString();
                 }
                 else if (sender == firstColorBtn)

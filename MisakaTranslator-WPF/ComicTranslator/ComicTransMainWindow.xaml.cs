@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using TranslatorLibrary;
 using OCRLibrary;
 using System.ComponentModel;
+using Windows.Win32;
 
 namespace MisakaTranslator_WPF.ComicTranslator
 {
@@ -60,6 +61,10 @@ namespace MisakaTranslator_WPF.ComicTranslator
             ComicImgList = new List<string>();
             CurrentPos = 0;
 
+            if (Common.appSettings.HttpProxy != "")
+            {
+                CommonFunction.SetHttpProxiedClient(Common.appSettings.HttpProxy);
+            }
             transRes1 = "";
             transRes2 = "";
             _translator1 = TranslateWindow.TranslatorAuto(Common.appSettings.FirstTranslator);
@@ -81,11 +86,18 @@ namespace MisakaTranslator_WPF.ComicTranslator
                     HandyControl.Controls.Growl.ErrorGlobal($"百度翻译OCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                 }
             }
-            else if (Common.appSettings.OCRsource == "Tesseract5")
+            else if (Common.appSettings.OCRsource == "TencentOCR")
             {
-                if (ocr.OCR_Init(Common.appSettings.Tesseract5OCR_Path, Common.appSettings.Tesseract5OCR_Args) == false)
+                if (ocr.OCR_Init(Common.appSettings.TXOSecretId, Common.appSettings.TXOSecretKey) == false)
                 {
-                    HandyControl.Controls.Growl.ErrorGlobal($"Tesseract5 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                    HandyControl.Controls.Growl.ErrorGlobal($"腾讯云图片翻译 {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                }
+            }
+            else if (Common.appSettings.OCRsource == "TesseractCli")
+            {
+                if (ocr.OCR_Init(Common.appSettings.TesseractCli_Path, Common.appSettings.TesseractCli_Args) == false)
+                {
+                    HandyControl.Controls.Growl.ErrorGlobal($"TesseractCli {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                 }
             }
             else if (Common.appSettings.OCRsource == "TesseractOCR")
@@ -93,6 +105,13 @@ namespace MisakaTranslator_WPF.ComicTranslator
                 if (ocr.OCR_Init("", "") == false)
                 {
                     HandyControl.Controls.Growl.ErrorGlobal($"TesseractOCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
+                }
+            }
+            else if (Common.appSettings.OCRsource == "WindowsOCR")
+            {
+                if (ocr.OCR_Init("", "") == false)
+                {
+                    HandyControl.Controls.Growl.ErrorGlobal($"Windows OCR {Application.Current.Resources["APITest_Error_Hint"]}\n{ocr.GetLastError()}");
                 }
             }
 
@@ -151,7 +170,10 @@ namespace MisakaTranslator_WPF.ComicTranslator
                 {
                     Bitmap bm = new Bitmap(Environment.CurrentDirectory + "\\comicTemp.png");
                     bm = ImageProcFunc.ColorToGrayscale(bm);
-                    sourceTextBox.Text = (await ocr.OCRProcessAsync(bm))?.Replace("\f", "");
+                    if (!(Common.appSettings.OCRsource == "BaiduFanyiOCR" || Common.appSettings.OCRsource == "TencentOCR"))
+                        sourceTextBox.Text = (await ocr.OCRProcessAsync(bm))?.Replace("\f", "");
+                    else
+                        transTextBox.Text = await ocr.OCRProcessAsync(bm);
                     bm.Dispose();
                 }
                 else {
@@ -198,7 +220,17 @@ namespace MisakaTranslator_WPF.ComicTranslator
         /// </summary>
         /// <param name="path"></param>
         private void ShowPictrue(string path) {
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(path);
+            System.Drawing.Bitmap bitmap;
+            try
+            {
+                bitmap = new System.Drawing.Bitmap(path);
+            }
+            catch(ArgumentException)
+            {
+                HandyControl.Controls.Growl.Warning("Failed to open " + path);
+                return;
+            }
+
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             ImageBrush imageBrush = new ImageBrush();
@@ -380,10 +412,6 @@ namespace MisakaTranslator_WPF.ComicTranslator
 
     public class FileNameSort : IComparer<string>
     {
-        //调用windos 的 DLL
-        [System.Runtime.InteropServices.DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
-        private static extern int StrCmpLogicalW(string param1, string param2);
-
         //前后文件名进行比较。
         public int Compare(string name1, string name2)
         {
@@ -399,7 +427,7 @@ namespace MisakaTranslator_WPF.ComicTranslator
             {
                 return 1;
             }
-            return StrCmpLogicalW(name1, name2);
+            return PInvoke.StrCmpLogical(name1, name2);
         }
     }
 

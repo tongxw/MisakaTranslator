@@ -26,7 +26,8 @@
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_General}" Selected="Item_OCRGeneral_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_Baidu}" Selected="Item_BaiduOCR_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_BaiduFanyi}" Selected="Item_BaiduFanyiOCR_Selected"/>
-                <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_Tesseract5}" Selected="Item_Tesseract5OCR_Selected"/>
+                <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_Tencent}" Selected="Item_TencentOCR_Selected"/>
+                <hc:SideMenuItem Header="{StaticResource SettingsMenu_OCRSettings_TesseractCli}" Selected="Item_TesseractCli_Selected"/>
             </hc:SideMenuItem>
             <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings}" FontSize="15">
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_General}" Selected="Item_TransGeneral_Selected"/>
@@ -40,11 +41,13 @@
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_KingsoftFAIT}" Selected="Item_KingsoftFAIT_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_Dreye}" Selected="Item_Dreye_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_DeepL}" Selected="Item_DeepLTrans_Selected"/>
+                <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_ChatGPT}" Selected="Item_ChatGPTTrans_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_IBM}" Selected="Item_IBM_Selected"/>
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_TranslatorSettings_Yandex}" Selected="Item_Yandex_Selected"/>
             </hc:SideMenuItem>
             <hc:SideMenuItem Header="{StaticResource SettingsMenu_DictSettings}" FontSize="15">
                 <hc:SideMenuItem Header="{StaticResource SettingsMenu_DictSettings_xxgrz}" Selected="Item_xxgrz_Selected"/>
+                <hc:SideMenuItem Header="MeCab" Selected="Item_MeCabSettings_Selected"/>
             </hc:SideMenuItem>
             <hc:SideMenuItem Header="{StaticResource SettingsMenu_TTSSettings}" FontSize="15" Selected="Item_TTSSettings_Selected"/>
             <hc:SideMenuItem Header="{StaticResource SettingsMenu_ATSettings}" FontSize="15" Selected="Item_ATSettings_Selected"/>

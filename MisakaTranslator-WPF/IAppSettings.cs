@@ -114,6 +114,20 @@ namespace MisakaTranslator_WPF
             set;
         }
 
+        [Option(Alias = "ChatGPTTranslator.apiKey", DefaultValue = "")]
+        string ChatGPTapiKey
+        {
+            get;
+            set;
+        }
+
+        [Option(Alias = "ChatGPTTranslator.apiUrl", DefaultValue = "https://api.openai.com/v1/chat/completions")]
+        string ChatGPTapiUrl
+        {
+            get;
+            set;
+        }
+
         [Option(Alias = "XiaoniuTranslator.xiaoniuApiKey", DefaultValue = "")]
         string xiaoniuApiKey
         {
@@ -154,6 +168,13 @@ namespace MisakaTranslator_WPF
         { 
             get; 
             set; 
+        }
+
+        [Option(Alias = "Translate_All.HttpProxy", DefaultValue = "")]
+        string HttpProxy
+        {
+            get;
+            set;
         }
 
         [Option(Alias = "Translate_All.EachRowTrans", DefaultValue = true)]
@@ -219,22 +240,22 @@ namespace MisakaTranslator_WPF
             set;
         }
 
-        [Option(Alias = "Tesseract5OCR.Path", DefaultValue = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe")]
-        string Tesseract5OCR_Path
+        [Option(Alias = "TesseractCli.Path", DefaultValue = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe")]
+        string TesseractCli_Path
         {
             get;
             set;
         }
 
-        [Option(Alias = "Tesseract5OCR.Mode", DefaultValue = "jpn")]
-        string Tesseract5OCR_Mode
+        [Option(Alias = "TesseractCli.Mode", DefaultValue = "jpn")]
+        string TesseractCli_Mode
         {
             get;
             set;
         }
 
-        [Option(Alias = "Tesseract5OCR.Args", DefaultValue = "")]
-        string Tesseract5OCR_Args
+        [Option(Alias = "TesseractCli.Args", DefaultValue = "")]
+        string TesseractCli_Args
         {
             get;
             set;
@@ -275,14 +296,14 @@ namespace MisakaTranslator_WPF
             set;
         }
 
-        [Option(Alias = "TranslateFormSettings.opacity", DefaultValue = "50")]
+        [Option(Alias = "TranslateFormSettings.opacity", DefaultValue = "100")]
         double TF_Opacity
         {
             get;
             set;
         }
 
-        [Option(Alias = "TranslateFormSettings.backColor", DefaultValue = "#ffffffff")]
+        [Option(Alias = "TranslateFormSettings.backColor", DefaultValue = "#7f000000")]
         string TF_BackColor
         {
             get;
@@ -380,6 +401,30 @@ namespace MisakaTranslator_WPF
             set;
         }
 
+        [Option(Alias ="TranslateFromSetting.isDropShaow",DefaultValue = true)]
+        bool TF_DropShadow 
+        {   get;
+            set;
+        }
+        [Option(Alias = "TranslateFromSetting.isUseHiragana", DefaultValue = true)]
+        bool TF_Hirakana
+        {
+            get;
+            set;
+        }
+        [Option(Alias = "TranslateFromSetting.isSuperBold", DefaultValue = true)]
+        bool TF_SuperBold
+        {
+            get;
+            set;
+        }
+        [Option(Alias = "TranslateFromSetting.isColorful", DefaultValue = true)]
+        bool TF_Colorful
+        {
+            get;
+            set;
+        }
+
         [Option(Alias = "ArtificialTrans.patchPath", DefaultValue = "")]
         string ArtificialPatchPath
         {
@@ -407,6 +452,15 @@ namespace MisakaTranslator_WPF
 
         [Option(DefaultValue = true)]
         bool GrowlEnabled { get; set; }
+
+        [Option(Alias = "Mecab.dicPath", DefaultValue = "")]
+        string Mecab_dicPath { get; set; }
+
+        [Option(Alias = "Textractor.Path32", DefaultValue = "")]
+        string Textractor_Path32 { get; set; }
+
+        [Option(Alias = "Textractor.Path64", DefaultValue = "")]
+        string Textractor_Path64 { get; set; }
     }
 
     public interface IRepeatRepairSettings

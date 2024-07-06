@@ -142,6 +142,10 @@ namespace MisakaTranslator_WPF {
             if (Common.GlobalOCRHotKey.RegisterHotKeyByStr(Common.appSettings.GlobalOCRHotkey, hwnd, CallBack) == false) {
                 Growl.ErrorGlobal(Application.Current.Resources["MainWindow_GlobalOCRError_Hint"].ToString());
             }
+            //解决UAC选择No后窗口会被Explorer覆盖 并通过TopMost调整窗口Z Order
+            base.Activate();
+            base.Topmost = true;
+            base.Topmost = false;
         }
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
@@ -207,21 +211,9 @@ namespace MisakaTranslator_WPF {
         private async Task StartTranslateByGid(int gid) {
             var pidList = new List<Process>();
 
-            foreach (var p in Process.GetProcesses())
-            {
-                try
-                {
-                    if (p.MainModule.FileName == gameInfoList[gid].FilePath)
-                        pidList.Add(p);
-                    else
-                        p.Dispose();
-                }
-                catch (System.ComponentModel.Win32Exception)
-                {
-                    //这个地方直接跳过，是因为32位程序确实会读到64位的系统进程，而系统进程是不能被访问的
-                    p.Dispose();
-                }
-            }
+            foreach (var (pid, path) in ProcessHelper.GetProcessesData(gameInfoList[gid].Isx64))
+                if (path == gameInfoList[gid].FilePath)
+                    pidList.Add(Process.GetProcessById(pid));
 
             if (pidList.Count == 0) {
                 HandyControl.Controls.MessageBox.Show(Application.Current.Resources["MainWindow_StartError_Hint"].ToString(), Application.Current.Resources["MessageBox_Hint"].ToString());
@@ -258,7 +250,7 @@ namespace MisakaTranslator_WPF {
 
             Common.textHooker = pidList.Count == 1 ? new TextHookHandle(pidList[0].Id) : new TextHookHandle(pidList);
 
-            if(!Common.textHooker.Init(!gameInfoList[gid].Isx64))
+            if (!Common.textHooker.Init(gameInfoList[gid].Isx64 ? Common.appSettings.Textractor_Path64 : Common.appSettings.Textractor_Path32))
             {
                 HandyControl.Controls.MessageBox.Show(Application.Current.Resources["MainWindow_TextractorError_Hint"].ToString());
                 return;
@@ -348,7 +340,7 @@ namespace MisakaTranslator_WPF {
         }
 
         public void CloseNotifyIcon() {
-            Instance.NotifyIconContextContent.Visibility = Visibility.Collapsed;
+            Application.Current.Dispatcher.Invoke(() => NotifyIconContextContent.Dispose());
         }
 
         private void ButtonPush_OnClick(object sender, RoutedEventArgs e) => NotifyIconContextContent.CloseContextControl();
@@ -393,24 +385,11 @@ namespace MisakaTranslator_WPF {
             if (gameInfoList == null)
                 return -1;
 
-            foreach (var process in Process.GetProcesses()) {
+            foreach (var (_, path) in ProcessHelper.GetProcessesData(true))
                 for (int j = 0; j < gameInfoList.Count; j++) {
-                    try
-                    {
-                        if (process.MainModule.FileName == gameInfoList[j].FilePath)
-                            return j;
-                    }
-                    catch (Win32Exception)
-                    {
-                        continue;
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        continue;
-                    }
+                    if (path == gameInfoList[j].FilePath)
+                        return j;
                 }
-                process.Dispose();
-            }
 
             return -1;
         }
@@ -460,6 +439,11 @@ namespace MisakaTranslator_WPF {
                 panel.SetValue(gw, sp);
                 this.Closing += (o, e) => gw.GetType().GetMethod("Close").Invoke(gw, null); // 关闭主窗口时关闭GrowlWindow否则程序无法退出
             }
+        }
+
+        private void LanguageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageContextMenu.IsOpen = true;
         }
     }
 }
